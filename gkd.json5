@@ -1,168 +1,173 @@
-// 红果免费短剧 增强去广告订阅
-// 适用包名: com.phoenix.read（国内版红果免费短剧）
-// 功能: 开屏广告跳过 / 播放中广告跳过 / 广告读秒结束后自动上滑下一集
+// 综合去广告订阅：红果免费短剧 / 优酷视频 / 懂球帝 / 雷速体育
+// 红果：开屏、播放广告、广告后自动上滑下一集
+// 优酷：开屏、视频推荐弹窗、播放/暂停广告、卡片与首页信息流广告
+// 懂球帝：开屏、首页信息流、弹窗、数据页广告
+// 雷速体育：开屏与通用广告关闭（通用规则，需实机验证）
 // 维护: JiaSir1990
 {
   id: 20261122,
-  name: '红果免费短剧-增强去广告',
-  version: 1,
-  author: 'JiaSir1990',
-  updateUrl: 'https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5',
-  checkUpdateUrl: 'https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5',
-  supportUri: 'https://github.com/JiaSir1990/gkd/issues',
+  name: "综合去广告-红果/优酷/懂球帝/雷速",
+  version: 2,
+  author: "JiaSir1990",
+  updateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
+  checkUpdateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
+  supportUri: "https://github.com/JiaSir1990/gkd/issues",
   globalGroups: [],
   apps: [
     {
-      id: 'com.phoenix.read',
-      name: '红果免费短剧',
+      id: "com.phoenix.read",
+      name: "红果免费短剧",
       groups: [
-        // ============ 1. 开屏广告 ============
         {
           key: -1,
-          name: '开屏广告',
-          desc: '启动时自动点击右上角[跳过]，最多匹配10秒，只执行一次',
+          name: "开屏广告",
+          desc: "启动时自动点击右上角[跳过]，最多匹配10秒，只执行一次",
           enable: true,
           matchTime: 10000,
           actionMaximum: 1,
-          resetMatch: 'app',
+          resetMatch: "app",
           priorityTime: 10000,
           actionCd: 1500,
           activityIds: [
-            'com.dragon.read.pages.main.MainFragmentActivity',
-            '.ad.openingscreenad.OpeningScreenADActivity',
+            "com.dragon.read.pages.main.MainFragmentActivity",
+            ".ad.openingscreenad.OpeningScreenADActivity",
           ],
           rules: [
             {
-              // 番茄/红果同源 SDK：可点击容器 desc=跳过广告，内部文字含“跳过”
               key: 0,
               fastQuery: true,
               actionDelay: 500,
-              matches:
-                '@[desc="跳过广告"][clickable=true] > [text*="跳过"][text.length<10][width<600 && height<300][visibleToUser=true]',
+              matches: "@[desc=\"跳过广告\"][clickable=true] > [text*=\"跳过\"][text.length<10][width<600 && height<300][visibleToUser=true]",
             },
             {
-              // 兜底：直接点“跳过 / 跳过 3s / 跳过广告”文字本身
               key: 1,
               fastQuery: true,
               actionDelay: 500,
               actionMaximumKey: 0,
-              matches:
-                '[text*="跳过"][text.length<10][width<600 && height<300][visibleToUser=true]',
+              matches: "[text*=\"跳过\"][text.length<10][width<600 && height<300][visibleToUser=true]",
             },
             {
               key: 2,
               fastQuery: true,
               actionDelay: 500,
               actionMaximumKey: 0,
-              matches: '[desc*="跳过广告"][clickable=true][visibleToUser=true]',
+              matches: "[desc*=\"跳过广告\"][clickable=true][visibleToUser=true]",
             },
           ],
         },
-
-        // ============ 2. 播放中的广告（中插 / 贴片） ============
         {
           key: 0,
-          name: '播放广告-自动跳过',
-          desc: '播放页出现[跳过广告]/[关闭广告]时自动点击',
+          name: "播放广告-自动跳过",
+          desc: "播放页出现[跳过广告]/[关闭广告]时自动点击",
           enable: true,
           actionCd: 1000,
           activityIds: [
-            'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
-            'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
-            'com.dragon.read.pages.main.MainFragmentActivity',
+            "com.dragon.read.component.shortvideo.impl.ShortSeriesActivity",
+            "com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity",
+            "com.dragon.read.pages.main.MainFragmentActivity",
           ],
           rules: [
             {
               key: 0,
               fastQuery: true,
-              matches: '[text="跳过广告"][visibleToUser=true]',
+              matches: "[text=\"跳过广告\"][visibleToUser=true]",
             },
             {
               key: 1,
               fastQuery: true,
               activityIds: [
-                'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
-                'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
+                "com.dragon.read.component.shortvideo.impl.ShortSeriesActivity",
+                "com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity",
               ],
-              matches:
-                '[text*="跳过"][text.length<10][width<600 && height<300][visibleToUser=true]',
+              matches: "[text*=\"跳过\"][text.length<10][width<600 && height<300][visibleToUser=true]",
             },
             {
               key: 2,
               fastQuery: true,
-              matches: '[text="关闭广告"][visibleToUser=true]',
+              matches: "[text=\"关闭广告\"][visibleToUser=true]",
             },
             {
               key: 3,
               fastQuery: true,
-              matches: '[desc="关闭广告"][clickable=true][visibleToUser=true]',
+              matches: "[desc=\"关闭广告\"][clickable=true][visibleToUser=true]",
             },
             {
-              // 广告角标“广告”右侧的关闭按钮（番茄小说同源播放器结构）
               key: 4,
               fastQuery: true,
-              matches: 'TextView[text="广告"] +2 Button[vid="close"][visibleToUser=true]',
+              matches: "TextView[text=\"广告\"] +2 Button[vid=\"close\"][visibleToUser=true]",
             },
           ],
         },
-
-        // ============ 3. 广告读秒结束后自动上滑，进入下一集 ============
         {
           key: 1,
-          name: '广告结束-自动上滑下一集',
-          desc: '读秒结束出现[上滑继续观看短剧]时，自动从下往上滑，直接进入下一集',
+          name: "广告结束-自动上滑下一集",
+          desc: "读秒结束出现[上滑继续观看短剧]时，自动从下往上滑，直接进入下一集",
           enable: true,
           actionCd: 2500,
           activityIds: [
-            'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
-            'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
-            'com.dragon.read.pages.main.MainFragmentActivity',
+            "com.dragon.read.component.shortvideo.impl.ShortSeriesActivity",
+            "com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity",
+            "com.dragon.read.pages.main.MainFragmentActivity",
           ],
           rules: [
             {
               key: 0,
               fastQuery: true,
               swipeArg: {
-                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
-                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                start: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.7",
+                },
+                end: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.3",
+                },
                 duration: 200,
               },
-              matches: '[text="上滑继续观看短剧"][visibleToUser=true]',
+              matches: "[text=\"上滑继续观看短剧\"][visibleToUser=true]",
             },
             {
               key: 1,
               fastQuery: true,
               swipeArg: {
-                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
-                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                start: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.7",
+                },
+                end: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.3",
+                },
                 duration: 200,
               },
-              matches: '[text*="上滑继续观看"][visibleToUser=true]',
+              matches: "[text*=\"上滑继续观看\"][visibleToUser=true]",
             },
             {
               key: 2,
               fastQuery: true,
               swipeArg: {
-                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
-                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                start: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.7",
+                },
+                end: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.3",
+                },
                 duration: 200,
               },
-              matches: '[desc*="上滑继续观看"][visibleToUser=true]',
+              matches: "[desc*=\"上滑继续观看\"][visibleToUser=true]",
             },
           ],
         },
-
-        // ============ 4. 兜底：广告遮住[选集]时定时上滑（默认关闭） ============
-        // 部分版本广告结束后不出现“上滑继续观看短剧”文字，
-        // 此时广告层会盖住播放页的[选集]按钮，可手动启用本组。
         {
           key: 2,
-          name: '兜底-广告遮挡时每5秒上滑（默认关闭）',
-          desc: '广告层遮挡[选集]时每5秒上滑一次；正常播放不触发。若上一组无效可手动开启',
+          name: "兜底-广告遮挡时每5秒上滑（默认关闭）",
+          desc: "广告层遮挡[选集]时每5秒上滑一次；正常播放不触发。若上一组无效可手动开启",
           enable: false,
           activityIds: [
-            'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
-            'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
+            "com.dragon.read.component.shortvideo.impl.ShortSeriesActivity",
+            "com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity",
           ],
           rules: [
             {
@@ -171,16 +176,423 @@
               actionCd: 4000,
               actionDelay: 1000,
               swipeArg: {
-                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
-                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                start: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.7",
+                },
+                end: {
+                  x: "screenWidth/2",
+                  y: "screenHeight * 0.3",
+                },
                 duration: 200,
               },
               excludeMatches: [
-                '[text="选集" || text*="剧评"][visibleToUser=true]',
-                '[text*="剧备字" || text="全屏观看"][height>0]',
-                'TextView[text$="%"][text.length<5][height>-50 && height<1]',
+                "[text=\"选集\" || text*=\"剧评\"][visibleToUser=true]",
+                "[text*=\"剧备字\" || text=\"全屏观看\"][height>0]",
+                "TextView[text$=\"%\"][text.length<5][height>-50 && height<1]",
               ],
-              matches: '[text="选集"][visibleToUser=false]',
+              matches: "[text=\"选集\"][visibleToUser=false]",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "com.youku.phone",
+      name: "优酷视频",
+      groups: [
+        {
+          key: 0,
+          name: "开屏广告",
+          desc: "启动 8 秒内自动点击右上角[跳过]",
+          enable: true,
+          matchTime: 8000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          priorityTime: 8000,
+          actionCd: 1500,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              actionDelay: 400,
+              matches: "[text*=\"跳过\"][text.length<10][width<600 && height<300][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              actionDelay: 400,
+              actionMaximumKey: 0,
+              matches: "[desc*=\"跳过\"][clickable=true][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              actionDelay: 400,
+              actionMaximumKey: 0,
+              matches: "[vid*=\"skip\"][clickable=true][width<500 && height<300][visibleToUser=true]",
+            },
+          ],
+        },
+        {
+          key: 1,
+          name: "播放广告-跳过",
+          desc: "播放页出现[跳过广告]或跳过按钮时自动点击",
+          activityIds: "com.youku.ui.activity.DetailActivity",
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "[text*=\"跳过\"][text.length<10][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              matches: "[vid*=\"ad_skip\"][visibleToUser=true]",
+            },
+          ],
+        },
+        {
+          key: 3,
+          name: "全屏广告-视频推荐弹窗",
+          fastQuery: true,
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          rules: [
+            {
+              activityIds: "com.youku.vip.wrapper.VipHomeActivity",
+              matches: "[id=\"com.youku.phone:id/closeView\"][desc=\"关闭弹层\"]",
+              snapshotUrls: "https://i.gkd.li/i/12701029",
+            },
+          ],
+        },
+        {
+          key: 4,
+          name: "全屏广告-视频播放时的广告",
+          desc: "点击[关闭广告]",
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              activityIds: "com.youku.ui.activity.DetailActivity",
+              matches: "[text=\"关闭广告\"][visibleToUser=true]",
+              exampleUrls: "https://m.gkd.li/57941037/529c75b6-1a97-4765-856b-dd4d4c810207",
+              snapshotUrls: "https://i.gkd.li/i/14321401",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              activityIds: "com.youku.ui.activity.DetailActivity",
+              matches: "[vid=\"xadsdk_pause_ad_close\"]",
+              exampleUrls: "https://m.gkd.li/57941037/42773084-a7db-4e70-878d-6a5eacd5ecb2",
+              snapshotUrls: "https://i.gkd.li/i/14321469",
+            },
+          ],
+        },
+        {
+          key: 5,
+          name: "局部广告-卡片广告",
+          desc: "点击关闭",
+          rules: [
+            {
+              key: 0,
+              name: "视频播放时的广告",
+              fastQuery: true,
+              activityIds: "com.youku.ui.activity.DetailActivity",
+              matches: "[vid=\"novelad_corner_close\"]",
+              exampleUrls: "https://m.gkd.li/57941037/8994fdc0-fce0-4a06-8bc5-2ff23fc3afe5",
+              snapshotUrls: "https://i.gkd.li/i/14321461",
+            },
+            {
+              key: 1,
+              name: "历史记录/搜索页面广告",
+              fastQuery: true,
+              activityIds: [
+                "com.youku.android.youkuhistory.activity.HistoryActivity",
+                "com.soku.searchsdk.activity.SearchActivity",
+              ],
+              matches: "[vid=\"novel_banner_ad_close\"]",
+              exampleUrls: "https://m.gkd.li/57941037/7a160f41-b101-40dc-b875-533623228406",
+              snapshotUrls: [
+                "https://i.gkd.li/i/14670383",
+                "https://i.gkd.li/i/14680702",
+              ],
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              activityIds: "com.youku.ui.activity.DetailActivity",
+              matches: "[vid=\"xadsdk_banner_ad_close\"]",
+              exampleUrls: "https://e.gkd.li/8577d2e5-20a4-40e0-92f0-191bafeb55ed",
+              snapshotUrls: "https://i.gkd.li/i/16925042",
+            },
+          ],
+        },
+        {
+          key: 6,
+          name: "分段广告-首页卡片广告",
+          fastQuery: true,
+          activityIds: "com.youku.v2.HomePageEntry",
+          rules: [
+            {
+              key: 0,
+              matches: "[vid=\"novel_banner_ad_feed_back\"][visibleToUser=true]",
+              exampleUrls: "https://e.gkd.li/6ae8cc7b-1302-4f10-b544-8d8265a69610",
+              snapshotUrls: "https://i.gkd.li/i/16925043",
+            },
+            {
+              preKeys: [
+                0,
+              ],
+              matches: "[text=\"就是不感兴趣\"]",
+              exampleUrls: "https://e.gkd.li/be57974c-6656-4619-aed8-c61421f6a748",
+              snapshotUrls: "https://i.gkd.li/i/16977036",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "com.dongqiudi.news",
+      name: "懂球帝",
+      groups: [
+        {
+          key: 0,
+          name: "开屏广告",
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          actionMaximumKey: 0,
+          priorityTime: 10000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              action: "clickCenter",
+              matches: "[text*=\"跳过\"][text.length<10][width<500 && height<300][visibleToUser=true]",
+              exampleUrls: "https://e.gkd.li/74db13f0-d87d-41a3-bbbb-1b075d8ae7d6",
+              snapshotUrls: "https://i.gkd.li/i/20218520",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              matches: "@View[clickable=true] - [text=\"互动广告\"][visibleToUser=true]",
+              exampleUrls: "https://e.gkd.li/3b636c88-23de-4e2a-86fd-2846a0f0274b",
+              snapshotUrls: "https://i.gkd.li/i/20262129",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              anyMatches: [
+                "@View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200&&height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0] <n FrameLayout[childCount>2][text=null][desc=null] >(n+6) [text*=\"第三方应用\" || text*=\"扭动手机\" || text*=\"点击或上滑\" || text*=\"省钱好物\" || text*=\"扭一扭\"][visibleToUser=true]",
+                "FrameLayout > FrameLayout[childCount>2][text=null][desc=null] > @View[text=null][clickable=true][childCount=0][visibleToUser=true][width<200&&height<200] +(1,2) TextView[index=parent.childCount.minus(1)][childCount=0][visibleToUser=true]",
+              ],
+              exampleUrls: "https://e.gkd.li/940ce4e2-da5f-4a43-b319-4131a22cb1e0",
+              snapshotUrls: "https://i.gkd.li/i/20262130",
+            },
+          ],
+          order: -10,
+        },
+        {
+          key: 2,
+          name: "更新提示",
+          fastQuery: true,
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          rules: [
+            {
+              activityIds: ".DownloadActivity",
+              matches: "TextView[text*=\"新版本\"] +3 TextView[text=\"下次提醒\"]",
+              snapshotUrls: "https://i.gkd.li/i/12620586",
+            },
+          ],
+        },
+        {
+          key: 4,
+          name: "分段广告-首页信息流广告",
+          desc: "点击卡片广告x关闭按钮-关闭反馈理由弹窗",
+          activityIds: "com.dongqiudi.news.MainActivity",
+          fastQuery: true,
+          rules: [
+            {
+              preKeys: [
+                1,
+                2,
+              ],
+              name: "首页信息流广告-反馈理由",
+              matches: "TextView[text=\"诱导点击\"][id=\"com.dongqiudi.news:id/text_item\"]",
+              snapshotUrls: "https://i.gkd.li/i/12620656",
+            },
+            {
+              key: 1,
+              matches: "TextView[id=\"com.dongqiudi.news:id/ads_label\"] +(n) ImageView[id=\"com.dongqiudi.news:id/feedback_close\"]",
+              snapshotUrls: "https://i.gkd.li/i/12620654",
+            },
+            {
+              key: 2,
+              matches: "TextView[id=\"com.dongqiudi.news:id/ads_title\"] +(2) RelativeLayout > ImageView[id=\"com.dongqiudi.news:id/feedback_close\"]",
+              snapshotUrls: "https://i.gkd.li/i/12620788",
+            },
+          ],
+        },
+        {
+          key: 5,
+          name: "全屏广告-弹窗广告",
+          desc: "点击关闭",
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matchTime: 10000,
+              actionMaximum: 1,
+              resetMatch: "app",
+              activityIds: "com.dongqiudi.news.MainActivity",
+              matches: "[id=\"com.dongqiudi.news:id/iv_close\"]",
+              snapshotUrls: "https://i.gkd.li/i/13260467",
+            },
+            {
+              key: 1,
+              activityIds: "com.bytedance.sdk.openadsdk.stub.activity.Stub_Standard_Portrait_Activity",
+              matches: "[text=\"反馈\"] +(1,2) View[childCount=1] > Image[childCount=0][text=\"\"][width<60 && height<60]",
+              exampleUrls: "https://e.gkd.li/87e47cae-fa83-4d25-879c-728a1519ee55",
+              snapshotUrls: "https://i.gkd.li/i/20403710",
+            },
+          ],
+        },
+        {
+          key: 8,
+          name: "全屏广告-数据页弹窗广告",
+          actionMaximum: 1,
+          resetMatch: "app",
+          activityIds: "com.dongqiudi.news.MainActivity",
+          rules: [
+            {
+              key: 1,
+              name: "腾讯广告SDK",
+              fastQuery: true,
+              matches: "@ImageView[childCount=0][text=null][desc=null][id=null][visibleToUser=true][width<90 && height<90] < FrameLayout[childCount=1][text=null][desc=null][id=null][parent.childCount>3] <n FrameLayout >(2,3) [text^=\"立即\" || text$=\"详情\" || text^=\"了解\" || text=\"去微信看看\" || text$=\"应用\" || text=\"进入小程序\" || text=\"领取优惠\" || text=\"跳转微信\"]",
+              snapshotUrls: "https://i.gkd.li/i/13626900",
+            },
+            {
+              key: 2,
+              name: "快手广告磁力智投SDK",
+              fastQuery: true,
+              matches: "ImageView[childCount=0][text=null] < @ViewGroup[childCount=1][clickable=true][visibleToUser=true] < ViewGroup +n ViewGroup[childCount=2] > [text=\"广告\"]",
+              snapshotUrls: "https://i.gkd.li/i/13627105",
+            },
+            {
+              key: 3,
+              name: "字节广告穿山甲SDK-1",
+              matches: "View[text=\"反馈\"] -2 @View > Image",
+              snapshotUrls: "https://i.gkd.li/i/13627106",
+            },
+            {
+              key: 4,
+              name: "字节广告穿山甲SDK-2",
+              matches: "FrameLayout[desc^=\"webview-close\"] > View[clickable=true]",
+              snapshotUrls: "https://i.gkd.li/i/12620588",
+            },
+          ],
+        },
+        {
+          key: 9,
+          name: "权限提示-通知权限",
+          desc: "点击关闭",
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          rules: [
+            {
+              fastQuery: true,
+              activityIds: ".MainActivity",
+              matches: "[vid=\"notification_button_close\"][visibleToUser=true]",
+              exampleUrls: "https://e.gkd.li/81cea4de-9288-4ec8-97ea-7c4a9b19fd08",
+              snapshotUrls: "https://i.gkd.li/i/19666282",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "com.leisu.sports",
+      name: "雷速体育",
+      groups: [
+        {
+          key: 0,
+          name: "开屏广告",
+          desc: "启动 10 秒内自动点击[跳过]（通用规则，待实机验证）",
+          enable: true,
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          priorityTime: 10000,
+          actionCd: 1500,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              actionDelay: 400,
+              matches: "[text*=\"跳过\"][text.length<10][width<600 && height<300][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              actionDelay: 400,
+              actionMaximumKey: 0,
+              matches: "[desc*=\"跳过\"][clickable=true][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              actionDelay: 400,
+              actionMaximumKey: 0,
+              matches: "[vid*=\"skip\"][clickable=true][width<500 && height<300][visibleToUser=true]",
+            },
+          ],
+        },
+        {
+          key: 1,
+          name: "广告-关闭按钮",
+          desc: "点击[关闭广告]，或广告角标右侧的小关闭按钮（通用规则，待实机验证）",
+          enable: true,
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "[text=\"关闭广告\"][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              matches: "[desc=\"关闭广告\"][clickable=true][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              matches: "TextView[text=\"广告\"] +n @ImageView[clickable=true][childCount=0][width<200 && height<200][visibleToUser=true]",
+            },
+            {
+              key: 3,
+              fastQuery: true,
+              matches: "TextView[text=\"广告\"] +n @View[clickable=true][childCount=0][width<200 && height<200][visibleToUser=true]",
+            },
+          ],
+        },
+        {
+          key: 2,
+          name: "弹窗广告-关闭",
+          desc: "点击小尺寸[关闭]按钮（通用规则，可能误关普通弹窗，默认关闭）",
+          enable: false,
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "[text=\"关闭\"][visibleToUser=true][width<200 && height<150]",
             },
           ],
         },
