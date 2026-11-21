@@ -7,7 +7,7 @@
 {
   id: 20261122,
   name: "综合去广告-红果/优酷/懂球帝/雷速",
-  version: 2,
+  version: 3,
   author: "JiaSir1990",
   updateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
   checkUpdateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
@@ -352,6 +352,36 @@
             },
           ],
         },
+        {
+          key: 7,
+          name: "局部广告-首页Banner广告",
+          desc: "点击首页大图广告右上角圆形X",
+          activityIds: "com.youku.v2.HomePageEntry",
+          fastQuery: true,
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "[vid=\"novel_banner_ad_close\"][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              matches: "[desc*=\"关闭广告\"][clickable=true][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              matches: "[vid*=\"ad_close\"][clickable=true][width<200 && height<200][visibleToUser=true]",
+            },
+            {
+              key: 3,
+              fastQuery: true,
+              matches: "[vid*=\"close\"][clickable=true][width<200 && height<200][visibleToUser=true]",
+            },
+          ],
+        },
       ],
     },
     {
@@ -391,6 +421,18 @@
               ],
               exampleUrls: "https://e.gkd.li/940ce4e2-da5f-4a43-b319-4131a22cb1e0",
               snapshotUrls: "https://i.gkd.li/i/20262130",
+            },
+            {
+              key: 3,
+              fastQuery: true,
+              actionMaximumKey: 0,
+              matches: "[text=\"跳过广告\"][visibleToUser=true]",
+            },
+            {
+              key: 4,
+              fastQuery: true,
+              actionMaximumKey: 0,
+              matches: "[desc*=\"跳过广告\"][clickable=true][visibleToUser=true]",
             },
           ],
           order: -10,
