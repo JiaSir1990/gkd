@@ -1,0 +1,190 @@
+// 红果免费短剧 增强去广告订阅
+// 适用包名: com.phoenix.read（国内版红果免费短剧）
+// 功能: 开屏广告跳过 / 播放中广告跳过 / 广告读秒结束后自动上滑下一集
+// 维护: JiaSir1990
+{
+  id: 20261122,
+  name: '红果免费短剧-增强去广告',
+  version: 1,
+  author: 'JiaSir1990',
+  updateUrl: 'https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5',
+  checkUpdateUrl: 'https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5',
+  supportUri: 'https://github.com/JiaSir1990/gkd/issues',
+  globalGroups: [],
+  apps: [
+    {
+      id: 'com.phoenix.read',
+      name: '红果免费短剧',
+      groups: [
+        // ============ 1. 开屏广告 ============
+        {
+          key: -1,
+          name: '开屏广告',
+          desc: '启动时自动点击右上角[跳过]，最多匹配10秒，只执行一次',
+          enable: true,
+          matchTime: 10000,
+          actionMaximum: 1,
+          resetMatch: 'app',
+          priorityTime: 10000,
+          actionCd: 1500,
+          activityIds: [
+            'com.dragon.read.pages.main.MainFragmentActivity',
+            '.ad.openingscreenad.OpeningScreenADActivity',
+          ],
+          rules: [
+            {
+              // 番茄/红果同源 SDK：可点击容器 desc=跳过广告，内部文字含“跳过”
+              key: 0,
+              fastQuery: true,
+              actionDelay: 500,
+              matches:
+                '@[desc="跳过广告"][clickable=true] > [text*="跳过"][text.length<10][width<600 && height<300][visibleToUser=true]',
+            },
+            {
+              // 兜底：直接点“跳过 / 跳过 3s / 跳过广告”文字本身
+              key: 1,
+              fastQuery: true,
+              actionDelay: 500,
+              actionMaximumKey: 0,
+              matches:
+                '[text*="跳过"][text.length<10][width<600 && height<300][visibleToUser=true]',
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              actionDelay: 500,
+              actionMaximumKey: 0,
+              matches: '[desc*="跳过广告"][clickable=true][visibleToUser=true]',
+            },
+          ],
+        },
+
+        // ============ 2. 播放中的广告（中插 / 贴片） ============
+        {
+          key: 0,
+          name: '播放广告-自动跳过',
+          desc: '播放页出现[跳过广告]/[关闭广告]时自动点击',
+          enable: true,
+          actionCd: 1000,
+          activityIds: [
+            'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
+            'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
+            'com.dragon.read.pages.main.MainFragmentActivity',
+          ],
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: '[text="跳过广告"][visibleToUser=true]',
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              activityIds: [
+                'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
+                'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
+              ],
+              matches:
+                '[text*="跳过"][text.length<10][width<600 && height<300][visibleToUser=true]',
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              matches: '[text="关闭广告"][visibleToUser=true]',
+            },
+            {
+              key: 3,
+              fastQuery: true,
+              matches: '[desc="关闭广告"][clickable=true][visibleToUser=true]',
+            },
+            {
+              // 广告角标“广告”右侧的关闭按钮（番茄小说同源播放器结构）
+              key: 4,
+              fastQuery: true,
+              matches: 'TextView[text="广告"] +2 Button[vid="close"][visibleToUser=true]',
+            },
+          ],
+        },
+
+        // ============ 3. 广告读秒结束后自动上滑，进入下一集 ============
+        {
+          key: 1,
+          name: '广告结束-自动上滑下一集',
+          desc: '读秒结束出现[上滑继续观看短剧]时，自动从下往上滑，直接进入下一集',
+          enable: true,
+          actionCd: 2500,
+          activityIds: [
+            'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
+            'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
+            'com.dragon.read.pages.main.MainFragmentActivity',
+          ],
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              swipeArg: {
+                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
+                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                duration: 200,
+              },
+              matches: '[text="上滑继续观看短剧"][visibleToUser=true]',
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              swipeArg: {
+                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
+                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                duration: 200,
+              },
+              matches: '[text*="上滑继续观看"][visibleToUser=true]',
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              swipeArg: {
+                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
+                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                duration: 200,
+              },
+              matches: '[desc*="上滑继续观看"][visibleToUser=true]',
+            },
+          ],
+        },
+
+        // ============ 4. 兜底：广告遮住[选集]时定时上滑（默认关闭） ============
+        // 部分版本广告结束后不出现“上滑继续观看短剧”文字，
+        // 此时广告层会盖住播放页的[选集]按钮，可手动启用本组。
+        {
+          key: 2,
+          name: '兜底-广告遮挡时每5秒上滑（默认关闭）',
+          desc: '广告层遮挡[选集]时每5秒上滑一次；正常播放不触发。若上一组无效可手动开启',
+          enable: false,
+          activityIds: [
+            'com.dragon.read.component.shortvideo.impl.ShortSeriesActivity',
+            'com.dragon.read.component.shortvideo.impl.fullscreen.ShortSeriesLandActivity',
+          ],
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              actionCd: 4000,
+              actionDelay: 1000,
+              swipeArg: {
+                start: { x: 'screenWidth/2', y: 'screenHeight * 0.7' },
+                end: { x: 'screenWidth/2', y: 'screenHeight * 0.3' },
+                duration: 200,
+              },
+              excludeMatches: [
+                '[text="选集" || text*="剧评"][visibleToUser=true]',
+                '[text*="剧备字" || text="全屏观看"][height>0]',
+                'TextView[text$="%"][text.length<5][height>-50 && height<1]',
+              ],
+              matches: '[text="选集"][visibleToUser=false]',
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
