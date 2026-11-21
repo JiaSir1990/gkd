@@ -1,13 +1,13 @@
 // 综合去广告订阅：红果免费短剧 / 优酷视频 / 懂球帝 / 雷速体育
 // 红果：开屏、播放广告、广告后自动上滑下一集
-// 优酷：开屏、视频推荐弹窗、播放/暂停广告、卡片与首页信息流广告
+// 优酷：开屏、倒计时自动关闭、视频推荐弹窗、播放/暂停广告、卡片/Banner/信息流广告
 // 懂球帝：开屏、首页信息流、弹窗、数据页广告
 // 雷速体育：开屏与通用广告关闭（通用规则，需实机验证）
 // 维护: JiaSir1990
 {
   id: 20261122,
   name: "综合去广告-红果/优酷/懂球帝/雷速",
-  version: 3,
+  version: 4,
   author: "JiaSir1990",
   updateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
   checkUpdateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
@@ -379,6 +379,30 @@
               key: 3,
               fastQuery: true,
               matches: "[vid*=\"close\"][clickable=true][width<200 && height<200][visibleToUser=true]",
+            },
+          ],
+        },
+        {
+          key: 8,
+          name: "全屏广告-倒计时自动关闭",
+          desc: "点击右上角[5后自动关闭 / 1后自动关闭]胶囊，立即关闭广告",
+          enable: true,
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "[text*=\"后自动关闭\"][text.length<12][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              matches: "[desc*=\"后自动关闭\"][clickable=true][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              matches: "[text*=\"自动关闭\"][text.length<10][width<400 && height<150][visibleToUser=true]",
             },
           ],
         },
