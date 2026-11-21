@@ -7,7 +7,7 @@
 {
   id: 20261122,
   name: "综合去广告-红果/优酷/懂球帝/雷速",
-  version: 5,
+  version: 6,
   author: "JiaSir1990",
   updateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
   checkUpdateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
@@ -337,19 +337,36 @@
           rules: [
             {
               key: 0,
+              fastQuery: true,
               matches: "[vid=\"novel_banner_ad_feed_back\"][visibleToUser=true]",
               exampleUrls: "https://e.gkd.li/6ae8cc7b-1302-4f10-b544-8d8265a69610",
               snapshotUrls: "https://i.gkd.li/i/16925043",
             },
             {
+              key: 1,
+              name: "点击广告角标",
+              fastQuery: true,
+              matches: "[text*=\"广告\"][text.length<6][width<300 && height<120][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              name: "选择不感兴趣",
               preKeys: [
                 0,
+                1,
               ],
-              matches: "[text=\"就是不感兴趣\"]",
-              exampleUrls: "https://e.gkd.li/be57974c-6656-4619-aed8-c61421f6a748",
-              snapshotUrls: "https://i.gkd.li/i/16977036",
+              fastQuery: true,
+              anyMatches: [
+                "[text=\"就是不感兴趣\"]",
+                "[text*=\"不感兴趣\"][text.length<10][visibleToUser=true]",
+                "[text*=\"关闭该广告\"][visibleToUser=true]",
+                "[text*=\"关闭广告\"][text.length<10][visibleToUser=true]",
+                "[text*=\"减少此类广告\"][visibleToUser=true]",
+                "[desc*=\"不感兴趣\"][clickable=true][visibleToUser=true]",
+              ],
             },
           ],
+          actionCd: 1500,
         },
         {
           key: 7,
