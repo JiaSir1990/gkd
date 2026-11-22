@@ -1,13 +1,14 @@
-// 综合去广告订阅：红果免费短剧 / 优酷视频 / 懂球帝 / 雷速体育
+// 综合去广告订阅：红果免费短剧 / 优酷视频 / 懂球帝 / 雷速体育 / 闲鱼
 // 红果：开屏、播放广告、广告后自动上滑下一集
 // 优酷：开屏、倒计时自动关闭、会员促销弹窗、视频推荐弹窗、播放/暂停广告、卡片/Banner/信息流广告
 // 懂球帝：开屏、首页信息流、弹窗、数据页广告
 // 雷速体育：开屏与通用广告关闭（通用规则，需实机验证）
+// 闲鱼：开屏、商品/搜索结果广告（长按广告标签→不喜欢该商品）、红包/夜市弹窗、通知权限
 // 维护: JiaSir1990
 {
   id: 20261122,
   name: "综合去广告-红果/优酷/懂球帝/雷速",
-  version: 8,
+  version: 9,
   author: "JiaSir1990",
   updateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
   checkUpdateUrl: "https://raw.githubusercontent.com/JiaSir1990/gkd/main/gkd.json5",
@@ -711,6 +712,116 @@
               key: 0,
               fastQuery: true,
               matches: "[text=\"关闭\"][visibleToUser=true][width<200 && height<150]",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "com.taobao.idlefish",
+      name: "闲鱼",
+      groups: [
+        {
+          key: 0,
+          name: "开屏广告",
+          desc: "启动 8 秒内自动点击右上角[跳过]",
+          enable: true,
+          matchTime: 8000,
+          actionMaximum: 1,
+          resetMatch: "app",
+          priorityTime: 8000,
+          actionCd: 1500,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              actionDelay: 400,
+              matches: "[text*=\"跳过\"][text.length<10][width<600 && height<300][visibleToUser=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              actionDelay: 400,
+              actionMaximumKey: 0,
+              matches: "[desc*=\"跳过\"][clickable=true][visibleToUser=true]",
+            },
+            {
+              key: 2,
+              fastQuery: true,
+              actionDelay: 400,
+              actionMaximumKey: 0,
+              matches: "[vid*=\"skip\"][clickable=true][width<500 && height<300][visibleToUser=true]",
+            },
+          ],
+        },
+        {
+          key: 1,
+          name: "分段广告-商品/搜索结果广告",
+          desc: "长按[广告]标签，再点[不喜欢该商品]",
+          enable: true,
+          actionCd: 1500,
+          rules: [
+            {
+              key: 0,
+              name: "长按广告标签",
+              action: "longClick",
+              matches: "@[clickable=true] > [desc$=\"广告\"]",
+              excludeMatches: "@[clickable=true] > [desc^=\"反馈成功\"]",
+              snapshotUrls: [
+                "https://i.gkd.li/i/14723597",
+                "https://i.gkd.li/i/14723718",
+              ],
+            },
+            {
+              key: 1,
+              name: "选择不喜欢该商品",
+              preKeys: [
+                0,
+              ],
+              anyMatches: [
+                "[desc^=\"不喜欢该商品\"] > ImageView[index=1][visibleToUser=true]",
+                "[text^=\"不喜欢该商品\"][visibleToUser=true]",
+                "[desc^=\"不喜欢该商品\"][clickable=true][visibleToUser=true]",
+              ],
+              snapshotUrls: "https://i.gkd.li/i/14723632",
+            },
+          ],
+        },
+        {
+          key: 2,
+          name: "全屏广告-红包/夜市弹窗",
+          desc: "关闭 Rax 活动弹窗、收下红包弹窗、夜市氛围弹窗",
+          enable: true,
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "WebView[text=\"Rax App\"] > [id=\"root\"] >(3,6) View[index=parent.childCount.minus(1)][clickable=true]",
+            },
+            {
+              key: 1,
+              fastQuery: true,
+              matches: "@TextView[width<250 && height<250] - [childCount=0][text=\"收下红包\"] <<n [vid=\"fish_layer_container_id\"]",
+            },
+            {
+              key: 2,
+              name: "夜市氛围广告",
+              fastQuery: true,
+              matches: "@TextView[width<210 && height<210][clickable=true] <<n WebView[childCount!=0][text=\"夜市氛围弹框\"] <<n [vid=\"fish_layer_container_id\"]",
+            },
+          ],
+        },
+        {
+          key: 3,
+          name: "权限提示-通知权限",
+          enable: true,
+          actionCd: 1000,
+          rules: [
+            {
+              key: 0,
+              fastQuery: true,
+              matches: "@ImageView[clickable=true][desc=null] < [desc^=\"开启系统通知\"]",
             },
           ],
         },
